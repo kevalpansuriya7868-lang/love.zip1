@@ -1,0 +1,219 @@
+/* Admin Management Styling - Integrated with Gaming Glass UI */
+
+/* Sidebar */
+.admin-body {
+    --bs-body-bg: var(--bg-dark);
+    --bs-body-color: var(--text-light);
+    --bs-card-bg: var(--bg-card);
+    --bs-card-color: var(--text-light);
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-light);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-hover-bg: rgba(0, 243, 255, 0.1);
+    --bs-secondary-bg: rgba(20, 20, 30, 0.6);
+    --bs-list-group-bg: transparent;
+}
+
+.admin-sidebar {
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    min-height: 100vh;
+    color: var(--text-light);
+    padding-top: 1.5rem;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.admin-sidebar .nav-link {
+    color: var(--text-muted) !important;
+    padding: 0.75rem 1.25rem !important;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.admin-sidebar .nav-link i {
+    width: 24px;
+    color: var(--neon-primary);
+}
+
+.admin-sidebar .nav-link:hover, .admin-sidebar .nav-link.active {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--neon-primary) !important;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+    border-left: 3px solid var(--neon-primary);
+}
+
+.admin-sidebar .nav-link.text-danger i {
+    color: var(--neon-secondary);
+}
+
+.admin-sidebar .nav-link.text-danger:hover {
+    background: rgba(157, 0, 255, 0.1);
+    color: var(--neon-secondary) !important;
+    text-shadow: 0 0 8px var(--neon-secondary);
+    border-left: 3px solid var(--neon-secondary);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-glass);
+    transition: transform 0.2s ease, border-color 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-primary);
+    box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
+}
+
+.stat-card-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--font-heading);
+    text-shadow: var(--neon-glow);
+}
+
+/* Admin Tables */
+.table-admin {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+    color: var(--text-light);
+}
+
+.table-admin thead {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.table-admin th {
+    color: var(--neon-primary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+}
+
+.table-admin td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-light);
+}
+
+.table-admin tr:last-child td {
+    border-bottom: none;
+}
+
+.table-admin tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Form overrides specific to admin */
+.admin-body h1, .admin-body h2, .admin-body h3, .admin-body h4, .admin-body h5, .admin-body h6 {
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* Global Bootstrap Overrides for Admin Glass Theme */
+.admin-body .card, .admin-body .bg-white {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--shadow-glass) !important;
+    color: var(--text-light) !important;
+}
+
+.admin-body .card-header {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    color: var(--text-light) !important;
+}
+
+.admin-body .list-group-item {
+    background: transparent !important;
+    border-color: var(--glass-border) !important;
+    color: var(--text-light) !important;
+}
+
+.admin-body .text-dark {
+    color: var(--text-light) !important;
+}
+
+.admin-body .text-secondary {
+    color: var(--text-muted) !important;
+}
+
+/* Aggressive Table Background Reset */
+.admin-body .table, 
+.admin-body .table > :not(caption) > * > *, 
+.admin-body .table td, 
+.admin-body .table th,
+.admin-body .table tr {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: var(--text-light) !important;
+    border-color: rgba(0, 243, 255, 0.2) !important;
+    box-shadow: none !important;
+}
+
+.admin-body .table tbody tr:hover > * {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.admin-body .table-responsive {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Admin Generic Buttons Override */
+.admin-body .btn-secondary {
+    background: rgba(20, 20, 30, 0.6) !important;
+    border: 1px solid var(--neon-primary) !important;
+    color: var(--neon-primary) !important;
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1) !important;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.admin-body .btn-secondary:hover {
+    background: rgba(0, 243, 255, 0.1) !important;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3) !important;
+    color: #fff !important;
+}
+
+.admin-body .btn-outline-secondary {
+    border: 1px solid var(--text-muted) !important;
+    color: var(--text-muted) !important;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.admin-body .btn-outline-secondary:hover {
+    border-color: var(--neon-primary) !important;
+    color: var(--neon-primary) !important;
+    background: rgba(0, 243, 255, 0.05) !important;
+    box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2) !important;
+}

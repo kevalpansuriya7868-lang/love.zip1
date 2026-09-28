@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Inspiration | Premium Fashion</title>
+    <meta name="description" content="Discover premium fashion, streetwear, and luxury lifestyle inspiration.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (Premium Look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="<?= url('pint/css/style.css') ?>">
+</head>
+<body>
+    
+    <!-- Glow Cursor Trail -->
+    <div class="cursor-glow"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Login Overlay (Hidden by default) -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-glass-panel">
+            <div class="login-logo">
+                <i class="ph ph-crown"></i>
+            </div>
+            <h2>Welcome Back</h2>
+            <p>Sign in to your luxury account.</p>
+            <form class="login-form">
+                <div class="input-group">
+                    <i class="ph ph-envelope-simple"></i>
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="ph ph-lock-key"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            <div class="login-footer">
+                <a href="#">Forgot password?</a>
+                <a href="#">Create an account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Wrapper -->
+    <div class="app-wrapper" id="appWrapper">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="ph ph-diamond"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active magnetic-btn" title="Home" onclick="window.location.href='<?= url('') ?>'"><i class="ph ph-house"></i></button>
+                <button class="nav-btn magnetic-btn" title="Explore" onclick="window.location.href='<?= url('pint/explore.html') ?>'"><i class="ph ph-compass"></i></button>
+                <button class="nav-btn magnetic-btn" title="Saved" onclick="window.location.href='<?= url('pint/saved.html') ?>'"><i class="ph ph-bookmark-simple"></i></button>
+                <button class="nav-btn magnetic-btn" title="Collections" onclick="window.location.href='<?= url('pint/collections.html') ?>'"><i class="ph ph-squares-four"></i></button>
+                <button class="nav-btn magnetic-btn" title="Notifications" onclick="window.location.href='<?= url('pint/notifications.html') ?>'"><i class="ph ph-bell"></i></button>
+                <button class="nav-btn magnetic-btn" title="Messages" onclick="window.location.href='<?= url('login') ?>'"><i class="ph ph-chat-circle"></i></button>
+            </nav>
+            <div class="sidebar-bottom">
+                <button class="nav-btn magnetic-btn" title="Settings" onclick="window.location.href='<?= url('pint/settings.html') ?>'"><i class="ph ph-gear"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Top Navigation -->
+            <header class="top-header">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <i class="ph ph-magnifying-glass search-icon"></i>
+                        <input type="text" placeholder="Search outfits, sneakers, aesthetics..." class="search-input">
+                        <div class="search-actions">
+                            <button class="icon-btn"><i class="ph ph-camera"></i></button>
+                            <button class="icon-btn"><i class="ph ph-microphone"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-container">
+                    <div class="avatar magnetic-btn">
+                        <img src="https://i.pravatar.cc/150?img=68" alt="Profile">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Category Chips -->
+            <div class="categories-container">
+                <div class="categories-scroll">
+                    <button class="chip active">All</button>
+                    <button class="chip">Men's Fashion</button>
+                    <button class="chip">Women's Fashion</button>
+                    <button class="chip">Sneakers</button>
+                    <button class="chip">Streetwear</button>
+                    <button class="chip">Old Money</button>
+                    <button class="chip">College Fits</button>
+                    <button class="chip">Accessories</button>
+                    <button class="chip">Aesthetic</button>
+                    <button class="chip">Trending</button>
+                    <button class="chip">Watches</button>
+                    <button class="chip">Luxury</button>
+                </div>
+            </div>
+
+            <!-- Masonry Grid -->
+            <div class="masonry-grid" id="masonryGrid">
+                <!-- Cards will be injected by JS -->
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Application Script -->
+    <script src="<?= url('pint/js/app.js') ?>"></script>
+</body>
+</html>

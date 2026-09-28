@@ -1,0 +1,14 @@
+{
+    "name": "couples/private-website",
+    "description": "A luxury minimal romantic private space for couples with real-time AJAX chat, photos, scrapbook memories, timeline, and complete admin dashboard.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

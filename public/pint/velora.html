@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELORA - Explore Inspiration</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+
+    <!-- Tailwind CSS (Play CDN for immediate preview) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#FAF8F4',
+                        accent: '#D4AF37',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F4;
+            color: #181818;
+            cursor: none; /* Custom cursor */
+        }
+        
+        /* Cursor */
+        .cursor-glow {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Masonry Layout */
+        .masonry-grid {
+            columns: 6 250px;
+            column-gap: 24px;
+            width: 100%;
+        }
+
+        .pin-card {
+            break-inside: avoid;
+            margin-bottom: 24px;
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.6s forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pin-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pin-image {
+            width: 100%;
+            display: block;
+            border-radius: 28px;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            min-height: 200px;
+            background: #e5e5e5; /* Loading placeholder color */
+        }
+
+        .pin-card:hover .pin-image {
+            transform: scale(1.05);
+        }
+
+        /* Overlays */
+        .pin-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
+            opacity: 0;
+            border-radius: 28px;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            pointer-events: none;
+        }
+
+        .pin-card:hover .pin-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Skeleton Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #e5e5e5 25%, #f0f0f0 50%, #e5e5e5 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) { .masonry-grid { columns: 4 200px; } }
+        @media (max-width: 768px) { .masonry-grid { columns: 2 150px; column-gap: 16px; } }
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor-glow { display: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative font-sans">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Sticky Header -->
+    <header class="fixed top-0 left-0 w-full z-50 p-4 md:p-6 transition-all duration-300" id="header">
+        <div class="max-w-6xl mx-auto glass rounded-full px-6 py-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+            <h1 class="font-heading font-bold text-2xl tracking-wide hidden md:block mr-4">VELORA</h1>
+            <div class="flex-1 relative">
+                <div class="flex items-center bg-white/50 rounded-full px-4 py-2 border border-black/5 focus-within:bg-white focus-within:shadow-md transition-all">
+                    <i class="ph ph-magnifying-glass text-2xl text-gray-400 mr-3"></i>
+                    <input type="text" id="searchInput" placeholder="Search anything... outfits, sneakers, anime, wallpapers, Krishna, cars..." autocomplete="off"
+                        class="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 font-medium">
+                </div>
+                <!-- Suggestions Dropdown -->
+                <ul id="suggestionsBox" class="hidden absolute top-full left-0 w-full mt-2 glass rounded-2xl shadow-xl overflow-hidden z-50 max-h-60 overflow-y-auto">
+                </ul>
+            </div>
+            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/5 text-gray-600 transition-colors"><i class="ph ph-camera text-2xl"></i></button>
+            <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/5 text-gray-600 transition-colors"><i class="ph ph-microphone text-2xl"></i></button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 px-4 md:px-8 max-w-[1800px] mx-auto pb-20">
+        
+        <!-- Loading Indicator -->
+        <div id="loader" class="text-center py-8 hidden">
+            <i class="ph ph-spinner animate-spin text-4xl text-accent"></i>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div class="masonry-grid" id="grid">
+            <!-- Cards injected via JS -->
+        </div>
+
+    </main>
+
+    <script>
+        // 1. Lenis Smooth Scroll
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // 2. Custom Cursor
+        const cursorGlow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+
+        // 3. Image Fetching & Search Logic
+        const grid = document.getElementById('grid');
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('suggestionsBox');
+        const loader = document.getElementById('loader');
+        
+        let currentQuery = 'luxury lifestyle';
+        let page = 1;
+        let isFetching = false;
+        let searchTimeout;
+
+        // Cache object
+        const searchCache = {};
+        
+        // Suggestion Keywords
+        const popularTags = ['Fashion', 'Sneakers', 'Wallpapers', 'Nature', 'Krishna', 'Cars', 'Gaming', 'AI Art', 'Interior Design', 'Anime', 'Couple Photos', 'Travel', 'Food', 'Technology', 'Old Money', 'Streetwear'];
+
+        // ==========================================
+        // INSERT YOUR PIXABAY API KEY HERE
+        // ==========================================
+        const PIXABAY_API_KEY = 'YOUR_API_KEY_HERE'; 
+
+        function generateImageCard(imageUrl, altText) {
+            const card = document.createElement('div');
+            card.className = 'pin-card skeleton';
+            
+            const heights = [300, 400, 450, 500, 600];
+            const h = heights[Math.floor(Math.random() * heights.length)];
+
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${altText}" class="pin-image" style="height: ${h}px; object-fit: cover; opacity: 0;" onload="this.style.opacity=1; this.style.height='auto'; this.parentElement.classList.remove('skeleton')">
+                <div class="pin-overlay">
+                    <div class="flex justify-end">
+                        <button class="bg-accent text-white px-5 py-2 rounded-full font-semibold text-sm hover:bg-[#b5952f] transition-transform hover:scale-105 transform translate-y-[-10px] group-hover:translate-y-0 shadow-lg">Save</button>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-800 hover:bg-white hover:scale-110 transition-all"><i class="ph ph-heart text-xl"></i></button>
+                        <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-800 hover:bg-white hover:scale-110 transition-all"><i class="ph ph-download-simple text-xl"></i></button>
+                        <button class="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-800 hover:bg-white hover:scale-110 transition-all"><i class="ph ph-dots-three text-xl"></i></button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        async function fetchImages(query, isNewSearch = false) {
+            if(isFetching) return;
+            isFetching = true;
+            
+            if(isNewSearch) {
+                grid.innerHTML = '';
+                page = 1;
+                loader.classList.remove('hidden');
+                
+                // Check Cache
+                if (searchCache[query] && searchCache[query].items.length > 0) {
+                    renderFromCache(query);
+                    loader.classList.add('hidden');
+                    isFetching = false;
+                    return; // Skip fetch if we have cached page 1
+                } else {
+                    searchCache[query] = { items: [], page: 1 };
+                }
+            }
+
+            try {
+                const response = await fetch(\`https://pixabay.com/api/?key=\${PIXABAY_API_KEY}&q=\${encodeURIComponent(query)}&page=\${page}&per_page=40&orientation=vertical&image_type=photo\`);
+                
+                if (!response.ok) {
+                    if(response.status === 400 || response.status === 401) {
+                        console.error("Pixabay API Error: Invalid API Key. Please update PIXABAY_API_KEY in the code.");
+                        handleMockFallback(query);
+                        return;
+                    }
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                if(!data.hits || data.hits.length === 0) {
+                    if (page === 1) handleMockFallback(query);
+                    else isFetching = false; // no more results
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+                data.hits.forEach(hit => {
+                    const imageUrl = hit.largeImageURL || hit.webformatURL;
+                    const altText = hit.tags || query;
+                    // Store in cache
+                    if(searchCache[query]) {
+                        searchCache[query].items.push({ imageUrl, altText });
+                    }
+                    fragment.appendChild(generateImageCard(imageUrl, altText));
+                });
+                
+                grid.appendChild(fragment);
+                if(searchCache[query]) searchCache[query].page = page;
+                page++;
+                
+            } catch (error) {
+                console.error("Error fetching images:", error);
+                handleMockFallback(query);
+            } finally {
+                loader.classList.add('hidden');
+                isFetching = false;
+            }
+        }
+
+        function renderFromCache(query) {
+            const cachedData = searchCache[query];
+            if(!cachedData) return;
+            
+            const fragment = document.createDocumentFragment();
+            cachedData.items.forEach(item => {
+                fragment.appendChild(generateImageCard(item.imageUrl, item.altText));
+            });
+            grid.appendChild(fragment);
+            page = cachedData.page + 1; // Set page to next available
+        }
+
+        function handleMockFallback(query) {
+            console.warn("Using fallback images.");
+            const fragment = document.createDocumentFragment();
+            for(let i = 0; i < 12; i++) {
+                const seed = Math.random().toString(36).substring(7);
+                const heights = [400, 500, 600];
+                const h = heights[Math.floor(Math.random() * heights.length)];
+                const imgUrl = \`https://source.unsplash.com/random/400x\${h}/?\${encodeURIComponent(query)}&sig=\${seed}\`;
+                
+                // Store mock in cache
+                if(searchCache[query]) {
+                    searchCache[query].items.push({ imageUrl: imgUrl, altText: query });
+                }
+                fragment.appendChild(generateImageCard(imgUrl, query));
+            }
+            grid.appendChild(fragment);
+            if(searchCache[query]) searchCache[query].page = page;
+            page++;
+            loader.classList.add('hidden');
+            isFetching = false;
+        }
+
+        // Initial Load
+        fetchImages(currentQuery, true);
+
+        // 4. Search & Suggestions Functionality
+        
+        function showSuggestions(query) {
+            suggestionsBox.innerHTML = '';
+            if(!query) {
+                suggestionsBox.classList.add('hidden');
+                return;
+            }
+            
+            const filtered = popularTags.filter(tag => tag.toLowerCase().includes(query.toLowerCase()));
+            
+            if(filtered.length === 0) {
+                // If no direct matches, show standard "Search for [query]" option
+                filtered.push(query); 
+            }
+
+            filtered.slice(0, 5).forEach(tag => {
+                const li = document.createElement('li');
+                li.className = 'px-4 py-3 hover:bg-black/5 cursor-pointer text-gray-800 font-medium transition-colors flex items-center gap-3';
+                li.innerHTML = \`<i class="ph ph-magnifying-glass text-gray-400"></i> \${tag}\`;
+                li.addEventListener('click', () => {
+                    searchInput.value = tag;
+                    suggestionsBox.classList.add('hidden');
+                    if(tag !== currentQuery) {
+                        currentQuery = tag;
+                        fetchImages(currentQuery, true);
+                    }
+                });
+                suggestionsBox.appendChild(li);
+            });
+            
+            suggestionsBox.classList.remove('hidden');
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            showSuggestions(val);
+            
+            // Debounce real-time fetch
+            clearTimeout(searchTimeout);
+            if(val) {
+                searchTimeout = setTimeout(() => {
+                    if(val !== currentQuery) {
+                        currentQuery = val;
+                        fetchImages(currentQuery, true);
+                    }
+                }, 600); // 600ms debounce
+            }
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                clearTimeout(searchTimeout); // Cancel debounce if enter is pressed
+                const query = searchInput.value.trim();
+                suggestionsBox.classList.add('hidden');
+                if(query && query !== currentQuery) {
+                    currentQuery = query;
+                    fetchImages(currentQuery, true);
+                }
+            }
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+
+        // 5. Infinite Scroll
+        window.addEventListener('scroll', () => {
+            if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+                fetchImages(currentQuery, false);
+            }
+        });
+
+    </script>
+</body>
+</html>
